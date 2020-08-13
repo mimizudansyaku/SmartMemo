@@ -1,8 +1,13 @@
 @color: #333;
-@headerColor: #fff;
-@headerBgColor: #C92229;
+// @headerColor: #;
+// @headerBgColor: #C92229;
 @marginLeft: 64px;
 @headerHeight: 64px;
+@footerHeight: 80px;
+@logoSpace: 50px;
+@borderColor: #dddddd;
+@btnColor1: #0099ff;
+@shadowColor: #627295;
 
 body {
   background-color: #f6f6f6;
@@ -17,10 +22,66 @@ a {
   top:0;
   left:0;
   width:100%;
-  height:@headerHeight; 
+  height:@headerHeight;
   line-height: @headerHeight;
-  background-color: @headerBgColor;
+  // background-color: @headerBgColor
+  border-bottom: 1px solid @borderColor;
   box-shadow: 0 1px 0 rgba(12, 13, 14, 0.15), 0 0 0;
+}
+.btn{
+  display: inline-block;
+  color: #FFF;
+}
+.btn-1{
+  width: 300px;
+  padding: 0.5em 1em;
+  border-bottom: solid 4px @shadowColor;
+  border-radius: 3px;
+  background-color: @btnColor1;
+}
+.btn-1:active{
+  -webkit-transform: translateY(4px);
+  transform: translateY(4px);
+  border-bottom: none;
+}
+#header-logo{
+  line-height: @headerHeight;
+  margin-left: @logoSpace;
+}
+.nav_item{
+  display: inline;
+  vertical-align: middle;
+  line-height: inherit;
+  // color: @headerColor;
+}
+.update_link{
+  float:right;
+}
+.avatar{
+  vertical-align:middle;
+  margin: (@headerHeight / 8);
+  width: (@headerHeight / 1.5);
+  height: (@headerHeight / 1.5);
+  display: inline-block;
+}
+.index{
+  min-height: 600px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 10px 0;
+}
+.bg{
+  background-image: url("/image/background.jpg");
+  background-color: rgba(255, 255, 255, 0.8);
+  background-blend-mode: lighten;
+  background-size: cover;
+  text-shadow: 1px 1px 4px rgba(153, 74, 74, 0.4);
+}
+.index-txt{
+  text-align: center;
+  background-color: rgba(255, 255, 255, 0);
 }
 #main{
   max-width:840px;
@@ -32,22 +93,6 @@ a {
 }
 #title {
   font-size: 20px;
-}
-.nav_item{
-  display: inline;
-  vertical-align: middle;
-  line-height: inherit;
-  color: @headerColor;
-}
-.update_link{
-  float:right;
-}
-.avatar{
-  vertical-align:middle;
-  margin: (@headerHeight / 8);
-  width: (@headerHeight / 1.5);
-  height: (@headerHeight / 1.5);
-  display: inline-block;
 }
 .msg {
   position:relative;
@@ -77,7 +122,7 @@ a {
   left: (@marginLeft / 8);
   top: 8px;
   width: (@marginLeft / 1.5);
-  height: (@marginLeft / 1.5);    
+  height: (@marginLeft / 1.5);
 }
 .msg_image{
   max-width: 256px;
@@ -95,7 +140,7 @@ a {
   resize:none;
 }
 #input-file{
-  display:inline;   
+  display:inline;
 }
 #submit-button{
   display:inline;
@@ -106,3 +151,13 @@ a {
   color: #fff;
 }
 
+#footer{
+  border-top: 1px solid @borderColor;
+  height: @footerHeight;
+}
+
+#footer-logo{
+  margin-left: @logoSpace;
+  line-height: @footerHeight;
+  font-size: 36px;
+}
