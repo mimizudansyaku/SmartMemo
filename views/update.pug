@@ -4,7 +4,7 @@ html(lang="ja")
     meta(charset="utf-8")
     link(href="/css/app.css" rel="stylesheet" type="text/css")
   body
-    include common/header
+    include common/_header
     section(id="main")
       h1 メッセージを投稿
       form(action="update" method="POST" encType="multipart/form-data")
@@ -12,4 +12,4 @@ html(lang="ja")
         textarea(placeholder="メッセージ" name="message" id="textarea-message")
         input(type="file" name="image" id="input-file")
         button(type="submit" id="submit-button") 送信
-    include common/footer
+    include common/_footer
