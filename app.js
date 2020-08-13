@@ -29,9 +29,9 @@ moment.tz.setDefault("Asia/Tokyo");
 
 mongoose.connect(process.env.MONGODB_URI,function(err){
   if(err){
-     console.error(err);
+    console.error(err);
   }else{
-     console.log("successfully connected to MongoDB.")
+    console.log("successfully connected to MongoDB.")
   }
 })
 
