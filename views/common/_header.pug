@@ -1,19 +1,14 @@
 nav(id="header")
   .update_link
-    ul.header_list
-      li
-        a(href="/about")
-          span(class="nav_item") SmartMemoとは
-      li
-        a(href="/update")
-          span(class="nav_item") 投稿する
-      if user
-        li
-          img(src=user.avatar_path class="avatar")
-          a(href="/logout")
-            span(class="nav_item") #{user.username}
-      else
-        li
-          a(href="/oauth/twitter")
-            span(class="nav_item") ログイン
+    a(href="/about")
+      span(class="nav_item") SmartMemoとは
+    a(href="/update")
+      span(class="nav_item") 投稿する
+    if user
+      img(src=user.avatar_path class="avatar")
+      a(href="/logout")
+        span(class="nav_item") #{user.username}
+    else
+      a(href="/oauth/twitter")
+        span(class="nav_item") ログイン
   a#header-logo(href="/") SmartMemo
