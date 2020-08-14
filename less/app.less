@@ -24,6 +24,7 @@ a {
   left:0;
   z-index: 10;
   width:100%;
+  background-color: inherit;
   height:@headerHeight;
   line-height: @headerHeight;
   // background-color: @headerBgColor
@@ -46,7 +47,7 @@ a {
   transform: translateY(4px);
   border-bottom: none;
 }
-#header-logo{
+#header_logo{
   line-height: @headerHeight;
   font-size: @logoSize;
   margin-left: @logoSpace;
@@ -59,7 +60,11 @@ a {
 }
 .update_link{
   float:right;
+}
+.header_list{
+  float: right;
   margin-right: 20px;
+  border-left: 1px solid @borderColor;
 }
 .avatar{
   vertical-align:middle;
@@ -70,7 +75,8 @@ a {
 }
 .index{
   min-height: 600px;
-  margin-top: 80px;
+  position: absolute;
+  top: 80px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -81,9 +87,10 @@ a {
   background-color: rgba(255, 255, 255, 0.8);
   background-blend-mode: lighten;
   background-size: cover;
+  background-position: ;
   text-shadow: 1px 1px 4px rgba(153, 74, 74, 0.4);
 }
-.index-txt{
+.index_txt{
   text-align: center;
   background-color: rgba(255, 255, 255, 0);
 }
@@ -161,7 +168,7 @@ a {
   height: @footerHeight;
 }
 
-#footer-logo{
+#footer_logo{
   margin-left: @logoSpace;
   line-height: @footerHeight;
   font-size: @logoSize;
