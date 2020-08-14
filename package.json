@@ -4,7 +4,8 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js"
+    "start": "node app.js",
+    "lessc": "./node_modules/less/bin/lessc less/app.less css/app.css"
   },
   "author": "",
   "license": "MIT",

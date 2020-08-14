@@ -4,6 +4,7 @@
 @marginLeft: 64px;
 @headerHeight: 64px;
 @footerHeight: 80px;
+@logoSize: 36px;
 @logoSpace: 50px;
 @borderColor: #dddddd;
 @btnColor1: #0099ff;
@@ -21,6 +22,7 @@ a {
   position: fixed;
   top:0;
   left:0;
+  z-index: 1;
   width:100%;
   height:@headerHeight;
   line-height: @headerHeight;
@@ -46,6 +48,7 @@ a {
 }
 #header-logo{
   line-height: @headerHeight;
+  font-size: @logoSpace;
   margin-left: @logoSpace;
 }
 .nav_item{
@@ -66,11 +69,11 @@ a {
 }
 .index{
   min-height: 600px;
+  top: 80px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin: 10px 0;
 }
 .bg{
   background-image: url("/image/background.jpg");
@@ -152,6 +155,7 @@ a {
 }
 
 #footer{
+  margin-top: 10px;
   border-top: 1px solid @borderColor;
   height: @footerHeight;
 }
@@ -159,5 +163,5 @@ a {
 #footer-logo{
   margin-left: @logoSpace;
   line-height: @footerHeight;
-  font-size: 36px;
+  font-size: @logoSize;
 }
