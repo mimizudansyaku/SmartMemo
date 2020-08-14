@@ -4,7 +4,6 @@ nav(id="header")
       span(class="nav_item") SmartMemoとは
     a(href="/update")
       span(class="nav_item") 投稿する
-  a#header-logo(href="/") SmartMemo
   if user
     img(src=user.avatar_path class="avatar")
     a(href="/logout")
@@ -12,3 +11,4 @@ nav(id="header")
   else
     a(href="/oauth/twitter")
       span(class="nav_item") ログイン
+  a#header-logo(href="/") SmartMemo
