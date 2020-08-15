@@ -80,13 +80,6 @@ app.get("/about", function(req, res, next) {
   return res.render('about');
 });
 
-app.post("/delete/:id", function(req, res, next) {
-  Message.remove({_id: req.params.id}, function(err){
-    if(err) throw err;
-    return res.redirect("/");
-  });
-});
-
 app.get("/logout", function(req, res, next) {
   req.logout();
   delete req.session.user
@@ -138,6 +131,51 @@ passport.deserializeUser(function(id, done) {
   User.findOne({_id: id}, function(err, user) {
     done(err, user);
   });
+});
+
+app.post("/delete/:id", function(req, res, next) {
+  Message.remove({_id: req.params.id}, function(err){
+    if(err) throw err;
+    return res.redirect("/");
+  });
+});
+
+app.get("/edit/:id", function(req, res, next) {
+  Message.find({_id: params.id}, function(err, msg) {
+    if(err) throw err;
+    return res.render('edit', {
+      message: msg
+    })
+  })
+})
+
+app.post("/update/:id", checkAuth, fileUpload(), csrfProtection, function(req, res, next) {
+  if(req.files && req.files.image){
+    var img = req.files.image
+
+    img.mv('./image/' + img.name, function(err){
+      if(err) throw err
+
+      Message.update(
+        {_id: req.params.id},
+        {$set: {message: req.body.message,
+                image_path: '/image' + img.name}},
+        function(err) {
+          if(err) throw err
+          return res.redirect("/");
+        }
+      );
+    });
+  }else{
+    Message.update(
+      {_id: req.params.id},
+      {$set: {message: req.body.message}},
+      function(err) {
+        if(err) throw err
+        return res.redirect("/");
+      }
+    );
+  }
 });
 
 app.get("/update", csrfProtection, function(req, res, next) {

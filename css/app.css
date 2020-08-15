@@ -82,6 +82,7 @@ ul {
 }
 #main {
   max-width: 840px;
+  min-height: 840px;
   margin: 0 auto;
   margin-top: 80px;
   padding: 16px;
