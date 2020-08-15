@@ -34,7 +34,8 @@ ul {
   transform: translateY(4px);
   border-bottom: none;
 }
-.delete_btn {
+.delete_btn,
+.update_btn {
   float: right;
 }
 #header_logo {

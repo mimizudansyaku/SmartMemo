@@ -144,7 +144,7 @@ app.get("/edit/:id", function(req, res, next) {
   Message.find({_id: params.id}, function(err, msg) {
     if(err) throw err;
     return res.render('edit', {
-      message: msg
+      msg: msg
     })
   })
 })
