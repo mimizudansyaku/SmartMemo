@@ -1,3 +1,4 @@
+/* eslint-disable */
 "use strict";
 
 var http = require('http');
@@ -119,7 +120,7 @@ app.get('/oauth/twitter/callback', passport.authenticate('twitter'),
                 username: user.username,
                 avatar_path: user.avatar_path
             };
-            return res.redirect("/")
+            return res.redirect("/");
         })
     }
 );
@@ -133,13 +134,6 @@ passport.deserializeUser(function(id, done) {
     });
 });
 
-app.post("/delete/:id", function(req, res, next) {
-    Message.remove({_id: req.params.id}, function(err){
-        if(err) throw err;
-        return res.redirect("/");
-    });
-});
-
 app.get("/new", csrfProtection, function(req, res, next) {
     return res.render('update', {
         user: req.session && req.session.user ? req.session.user : null,
@@ -149,7 +143,7 @@ app.get("/new", csrfProtection, function(req, res, next) {
 
 app.post("/new", checkAuth, fileUpload(), csrfProtection, function(req, res, next) {
     if(req.files && req.files.image){
-        var img = req.files.image
+        var img = req.files.image;
 
         img.mv('./image/' + img.name, function(err){
             if(err) throw err
@@ -161,7 +155,7 @@ app.post("/new", checkAuth, fileUpload(), csrfProtection, function(req, res, nex
             })
             newMessage.save(function(err) {
                 if(err) throw err
-                return res.redirect("/")
+                return res.redirect("/");
             })
         })
     }else{
@@ -172,7 +166,7 @@ app.post("/new", checkAuth, fileUpload(), csrfProtection, function(req, res, nex
         })
         newMessage.save(function(err){
             if(err) throw err
-            return res.redirect("/")
+            return res.redirect("/");
         })
     }
 })
@@ -185,7 +179,7 @@ app.get("/edit/:id", function(req, res, next) {
             user: req.session && req.session.user ? req.session.user : null,
             csrf: req.csrfToken()
         });
-    })
+    })；
 });
 
 app.post("/update/:id", checkAuth, fileUpload(), csrfProtection, function(req, res, next) {
@@ -215,6 +209,13 @@ app.post("/update/:id", checkAuth, fileUpload(), csrfProtection, function(req, r
             }
         );
     }
+});
+
+app.post("/delete/:id", function(req, res, next) {
+    Message.remove({_id: req.params.id}, function(err){
+        if(err) throw err;
+        return res.redirect("/");
+    });
 });
 
 app.use(function(req, res, next) {
