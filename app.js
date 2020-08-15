@@ -144,10 +144,12 @@ app.get("/edit/:id", function(req, res, next) {
   Message.find({_id: params.id}, function(err, msg) {
     if(err) throw err;
     return res.render('edit', {
-      msg: msg
-    })
+      msg: msg,
+      user: req.session && req.session.user ? req.session.user : null,
+      csrf: req.csrfToken()
+    });
   })
-})
+});
 
 app.post("/update/:id", checkAuth, fileUpload(), csrfProtection, function(req, res, next) {
   if(req.files && req.files.image){
