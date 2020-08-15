@@ -20,39 +20,39 @@ var csrfProtection = csrf();
 var log = require('./lib/error_logger');
 
 var twitterConfig = {
-  consumerKey: process.env.TWITTER_CONSUMER_KEY,
-  consumerSecret: process.env.TWITTER_CONSUMER_SECRET,
-  callbackURL: process.env.TWITTER_CALLBACK_URL,
+    consumerKey: process.env.TWITTER_CONSUMER_KEY,
+    consumerSecret: process.env.TWITTER_CONSUMER_SECRET,
+    callbackURL: process.env.TWITTER_CALLBACK_URL,
 };
 
 moment.tz.setDefault("Asia/Tokyo");
 
 mongoose.connect(process.env.MONGODB_URI,function(err){
-  if(err){
-    console.error(err);
-  }else{
-    console.log("successfully connected to MongoDB.")
-  }
+    if(err){
+        console.error(err);
+    }else{
+        console.log("successfully connected to MongoDB.")
+    }
 })
 
 function checkAuth(req, res, next) {
-  if(req.isAuthenticated()){
-    return next()
-  }else{
-    return res.redirect('/oauth/twitter')
-  }
+    if(req.isAuthenticated()){
+        return next()
+    }else{
+        return res.redirect('/oauth/twitter')
+    }
 }
 
 app.use(bodyparser())
 app.use(session({
-  secret: 'b87ef9fb4a152dbfe4cf4ea630444474',
-  resave : false,
-  saveUninitialized : false,
-  store: new MongoStore({
-    mongooseConnection: mongoose.connection,
-    db: 'session',
-    ttl: 14 * 24 * 60 * 60,
-  })
+    secret: 'b87ef9fb4a152dbfe4cf4ea630444474',
+    resave : false,
+    saveUninitialized : false,
+    store: new MongoStore({
+        mongooseConnection: mongoose.connection,
+        db: 'session',
+        ttl: 14 * 24 * 60 * 60,
+    })
 }))
 
 app.use(passport.initialize());
@@ -66,177 +66,176 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
 app.get("/",function(req, res, next) {
-  Message.find({}, function(err, msgs){
-    if(err) throw err;
-    return res.render('index', {
-      messages: msgs,
-      user: req.session && req.session.user ? req.session.user : null,
-      moment: moment
-    });
-  })
+    Message.find({}, function(err, msgs){
+        if(err) throw err;
+        return res.render('index', {
+            messages: msgs,
+            user: req.session && req.session.user ? req.session.user : null,
+            moment: moment
+        });
+    })
 });
 
 app.get("/about", function(req, res, next) {
-  return res.render('about');
+    return res.render('about');
 });
 
 app.get("/logout", function(req, res, next) {
-  req.logout();
-  delete req.session.user
-  return res.redirect("/");
+    req.logout();
+    delete req.session.user
+    return res.redirect("/");
 })
 
 passport.use(new TwitterStrategy(twitterConfig,
-  function(token, tokenSecret, profile, done){
-    User.findOne({ twitter_profile_id: profile.id }, function(err, user) {
-      if (err) {
-        return done(err);
-      }else if (!user) {
-        var _user = {
-          username: profile.displayName,
-          twitter_profile_id: profile.id,
-          avatar_path: profile.photos[0].value
-        };
-        var newUser = new User(_user);
-        newUser.save(function(err) {
-          if(err) throw err
-          return done(null, newUser);
+    function(token, tokenSecret, profile, done){
+        User.findOne({ twitter_profile_id: profile.id }, function(err, user) {
+            if (err) {
+                return done(err);
+            }else if (!user) {
+                var _user = {
+                    username: profile.displayName,
+                    twitter_profile_id: profile.id,
+                    avatar_path: profile.photos[0].value
+                };
+                var newUser = new User(_user);
+                newUser.save(function(err) {
+                    if(err) throw err
+                    return done(null, newUser);
+                });
+            }else{
+                return done(null, user);
+            }
         });
-      }else{
-        return done(null, user);
-      }
-    });
-  }
+    }
 ));
 app.get('/oauth/twitter', passport.authenticate('twitter'));
 
 app.get('/oauth/twitter/callback', passport.authenticate('twitter'),
-  function(req, res, next) {
+    function(req, res, next) {
 
-    User.findOne({_id: req.session.passport.user}, function(err, user) {
-      if(err||!req.session) return res.redirect('/oauth/twitter')
-      req.session.user = {
-        username: user.username,
-        avatar_path: user.avatar_path
-      };
-      return res.redirect("/")
-    })
-  }
+        User.findOne({_id: req.session.passport.user}, function(err, user) {
+            if(err||!req.session) return res.redirect('/oauth/twitter')
+            req.session.user = {
+                username: user.username,
+                avatar_path: user.avatar_path
+            };
+            return res.redirect("/")
+        })
+    }
 );
 passport.serializeUser(function(user, done) {
-  done(null, user._id);
+    done(null, user._id);
 });
 
 passport.deserializeUser(function(id, done) {
-  User.findOne({_id: id}, function(err, user) {
-    done(err, user);
-  });
+    User.findOne({_id: id}, function(err, user) {
+        done(err, user);
+    });
 });
 
 app.post("/delete/:id", function(req, res, next) {
-  Message.remove({_id: req.params.id}, function(err){
-    if(err) throw err;
-    return res.redirect("/");
-  });
+    Message.remove({_id: req.params.id}, function(err){
+        if(err) throw err;
+        return res.redirect("/");
+    });
 });
 
 app.get("/new", csrfProtection, function(req, res, next) {
-  return res.render('update', {
-    user: req.session && req.session.user ? req.session.user : null,
-    csrf: req.csrfToken()
-  });
+    return res.render('update', {
+        user: req.session && req.session.user ? req.session.user : null,
+        csrf: req.csrfToken()
+    });
 });
 
 app.post("/new", checkAuth, fileUpload(), csrfProtection, function(req, res, next) {
-  if(req.files && req.files.image){
-    var img = req.files.image
+    if(req.files && req.files.image){
+        var img = req.files.image
 
-    img.mv('./image/' + img.name, function(err){
-      if(err) throw err
-
-      var newMessage = new Message({
-        username: req.body.username,
-        avatar_path: req.session.user.avatar_path,
-        message: req.body.message,
-        image_path: '/image/' + img.name,
-      })
-      newMessage.save(function(err) {
-        if(err) throw err
-        return res.redirect("/")
-      })
-    })
-  }else{
-      var newMessage = new Message({
-        username: req.body.username,
-        avatar_path: req.session.user.avatar_path,
-        message: req.body.message,
-      })
-      newMessage.save(function(err){
-        if(err) throw err
-        return res.redirect("/")
-      })
-  }
+        img.mv('./image/' + img.name, function(err){
+            if(err) throw err
+            var newMessage = new Message({
+                username: req.body.username,
+                avatar_path: req.session.user.avatar_path,
+                message: req.body.message,
+                image_path: '/image/' + img.name,
+            })
+            newMessage.save(function(err) {
+                if(err) throw err
+                return res.redirect("/")
+            })
+        })
+    }else{
+        var newMessage = new Message({
+            username: req.body.username,
+            avatar_path: req.session.user.avatar_path,
+            message: req.body.message,
+        })
+        newMessage.save(function(err){
+            if(err) throw err
+            return res.redirect("/")
+        })
+    }
 })
 
 app.get("/edit/:id", function(req, res, next) {
-  Message.find({_id: req.params.id}, function(err, msg) {
-    if(err) throw err;
-    return res.render('edit', {
-      msg: msg,
-      user: req.session && req.session.user ? req.session.user : null,
-      csrf: req.csrfToken()
-    });
-  })
+    Message.find({_id: req.params.id}, function(err, msg) {
+        if(err) throw err;
+        return res.render('edit', {
+            msg: msg,
+            user: req.session && req.session.user ? req.session.user : null,
+            csrf: req.csrfToken()
+        });
+    })
 });
 
 app.post("/update/:id", checkAuth, fileUpload(), csrfProtection, function(req, res, next) {
-  if(req.files && req.files.image){
-    var img = req.files.image
+    if(req.files && req.files.image){
+        var img = req.files.image
 
-    img.mv('./image/' + img.name, function(err){
-      if(err) throw err
+        img.mv('./image/' + img.name, function(err){
+            if(err) throw err
 
-      Message.update(
-        {_id: req.params.id},
-        {$set: {message: req.body.message,
-                image_path: '/image' + img.name}},
-        function(err) {
-          if(err) throw err
-          return res.redirect("/");
-        }
-      );
-    });
-  }else{
-    Message.update(
-      {_id: req.params.id},
-      {$set: {message: req.body.message}},
-      function(err) {
-        if(err) throw err
-        return res.redirect("/");
-      }
-    );
-  }
+            Message.update(
+                {_id: req.params.id},
+                {$set: {message: req.body.message,
+                        image_path: '/image' + img.name}},
+                function(err) {
+                    if(err) throw err
+                    return res.redirect("/");
+                }
+            );
+        });
+    }else{
+        Message.update(
+            {_id: req.params.id},
+            {$set: {message: req.body.message}},
+            function(err) {
+                if(err) throw err
+                return res.redirect("/");
+            }
+        );
+    }
 });
 
 app.use(function(req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  return res.render('error', {
-    status: err.status,
-  });
+    var err = new Error('Not Found');
+    err.status = 404;
+    return res.render('error', {
+        status: err.status,
+    });
 });
 
 app.use(function(err, req, res, next) {
-  log.error(err);
-  if (err.code === 'EBADCSRFTOKEN'){
-    res.status(403)
-  }else{
-    res.status(err.status || 500);
-  }
-  return res.render('error', {
-    message: err.message,
-    status: err.status || 500
-  });
+    log.error(err);
+    if (err.code === 'EBADCSRFTOKEN'){
+        res.status(403)
+    }else{
+        res.status(err.status || 500);
+    }
+    return res.render('error', {
+        message: err.message,
+        status: err.status || 500
+    });
 });
 
 var server = http.createServer(app);
