@@ -15,7 +15,7 @@ html(lang="ja")
               time(class="msg_date") #{moment(msg.date).format('YYYY-MM-DD HH:mm:ss')}
               form(action="/delete/" + msg._id, method="POST")
                 input(type="submit", value="削除", class="delete_btn")
-              form(action="/edit/" + msg._id, method="POST")
+              form(action="/edit/" + msg._id, method="GET")
                 input(type="submit", value="変更", class="update_btn")
             .msg_main
               p.msg_body #{msg.message}
