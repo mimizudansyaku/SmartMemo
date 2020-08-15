@@ -77,7 +77,7 @@ app.get("/",function(req, res, next) {
 });
 
 app.get("/about", function(req, res, next) {
-  res.render("about");
+  return res.render("about");
 });
 
 app.get("/logout", function(req, res, next) {
