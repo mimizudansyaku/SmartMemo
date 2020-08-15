@@ -77,7 +77,14 @@ app.get("/",function(req, res, next) {
 });
 
 app.get("/about", function(req, res, next) {
-  return res.render("about");
+  return res.render('about');
+});
+
+app.post("/delete/:id", function(req, res, next) {
+  Message.remove({_id: req.params.id}, function(err){
+    if(err) throw err;
+    return res.redirect("/");
+  });
 });
 
 app.get("/logout", function(req, res, next) {

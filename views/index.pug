@@ -13,11 +13,14 @@ html(lang="ja")
             .msg_meta
               h2(class="msg_username") #{msg.username}
               time(class="msg_date") #{moment(msg.date).format('YYYY-MM-DD HH:mm:ss')}
+              form(action="/delete/"+#{msg._id}, method="POST")
+                input(type="submit", value="削除")
             .msg_main
               p.msg_body #{msg.message}
             img(src=msg.avatar_path class="msg_avatar")
           if msg.image_path
             img(src=msg.image_path class="msg_image")
+
     else
       .index.bg
         .index_txt
