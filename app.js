@@ -140,6 +140,44 @@ app.post("/delete/:id", function(req, res, next) {
   });
 });
 
+app.get("/new", csrfProtection, function(req, res, next) {
+  return res.render('update', {
+    user: req.session && req.session.user ? req.session.user : null,
+    csrf: req.csrfToken()
+  });
+});
+
+app.post("/new", checkAuth, fileUpload(), csrfProtection, function(req, res, next) {
+  if(req.files && req.files.image){
+    var img = req.files.image
+
+    img.mv('./image/' + img.name, function(err){
+      if(err) throw err
+
+      var newMessage = new Message({
+        username: req.body.username,
+        avatar_path: req.session.user.avatar_path,
+        message: req.body.message,
+        image_path: '/image/' + img.name,
+      })
+      newMessage.save(function(err) {
+        if(err) throw err
+        return res.redirect("/")
+      })
+    })
+  }else{
+      var newMessage = new Message({
+        username: req.body.username,
+        avatar_path: req.session.user.avatar_path,
+        message: req.body.message,
+      })
+      newMessage.save(function(err){
+        if(err) throw err
+        return res.redirect("/")
+      })
+  }
+})
+
 app.get("/edit/:id", function(req, res, next) {
   Message.find({_id: params.id}, function(err, msg) {
     if(err) throw err;
@@ -179,44 +217,6 @@ app.post("/update/:id", checkAuth, fileUpload(), csrfProtection, function(req, r
     );
   }
 });
-
-app.get("/update", csrfProtection, function(req, res, next) {
-  return res.render('update', {
-    user: req.session && req.session.user ? req.session.user : null,
-    csrf: req.csrfToken()
-  });
-});
-
-app.post("/update", checkAuth, fileUpload(), csrfProtection, function(req, res, next) {
-  if(req.files && req.files.image){
-    var img = req.files.image
-
-    img.mv('./image/' + img.name, function(err){
-      if(err) throw err
-
-      var newMessage = new Message({
-        username: req.body.username,
-        avatar_path: req.session.user.avatar_path,
-        message: req.body.message,
-        image_path: '/image/' + img.name,
-      })
-      newMessage.save(function(err) {
-        if(err) throw err
-        return res.redirect("/")
-      })
-    })
-  }else{
-      var newMessage = new Message({
-        username: req.body.username,
-        avatar_path: req.session.user.avatar_path,
-        message: req.body.message,
-      })
-      newMessage.save(function(err){
-        if(err) throw err
-        return res.redirect("/")
-      })
-  }
-})
 
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
