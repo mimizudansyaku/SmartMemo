@@ -13,7 +13,7 @@ html(lang="ja")
             .msg_meta
               h2(class="msg_username") #{msg.username}
               time(class="msg_date") #{moment(msg.date).format('YYYY-MM-DD HH:mm:ss')}
-              form(action="/delete/"+#{msg._id}, method="POST")
+              form(action="/delete/" + msg._id, method="POST")
                 input(type="submit", value="削除")
             .msg_main
               p.msg_body #{msg.message}
