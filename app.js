@@ -1,4 +1,3 @@
-/* eslint-disable */
 "use strict";
 
 var http = require('http');
@@ -179,7 +178,7 @@ app.get("/edit/:id", function(req, res, next) {
             user: req.session && req.session.user ? req.session.user : null,
             csrf: req.csrfToken()
         });
-    })；
+    });
 });
 
 app.post("/update/:id", checkAuth, fileUpload(), csrfProtection, function(req, res, next) {
