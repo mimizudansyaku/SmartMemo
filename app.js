@@ -134,7 +134,7 @@ passport.deserializeUser(function(id, done) {
 });
 
 app.get("/new", csrfProtection, function(req, res, next) {
-    return res.render('update', {
+    return res.render('new', {
         user: req.session && req.session.user ? req.session.user : null,
         csrf: req.csrfToken()
     });
