@@ -171,7 +171,7 @@ app.post("/new", checkAuth, fileUpload(), csrfProtection, function(req, res, nex
 })
 
 app.get("/edit/:id", csrfProtection, function(req, res, next) {
-    Message.find({_id: req.params.id}, function(err, msg) {
+    Message.findOne({_id: req.params.id}, function(err, msg) {
         if(err) throw err;
         return res.render('edit', {
             msg: msg,
