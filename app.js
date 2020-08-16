@@ -141,15 +141,16 @@ app.get("/new", csrfProtection, (req, res, next)=> {
 });
 
 app.post("/new", checkAuth, fileUpload(), csrfProtection, (req, res, next)=> {
+    const {username, message} = req.body;
     if(req.files && req.files.image){
         const img = req.files.image;
 
         img.mv('./image/' + img.name, (err)=> {
             if(err) throw err
             const newMessage = new Message({
-                username: req.body.username,
+                username: username,
                 avatar_path: req.session.user.avatar_path,
-                message: req.body.message,
+                message: message,
                 image_path: '/image/' + img.name,
             })
             newMessage.save((err)=> {
@@ -159,9 +160,9 @@ app.post("/new", checkAuth, fileUpload(), csrfProtection, (req, res, next)=> {
         })
     }else{
         const newMessage = new Message({
-            username: req.body.username,
+            username: username,
             avatar_path: req.session.user.avatar_path,
-            message: req.body.message,
+            message: message,
         })
         newMessage.save((err)=> {
             if(err) throw err
@@ -219,7 +220,7 @@ app.post("/delete/:id", (req, res, next)=> {
 });
 
 app.use((req, res, next)=> {
-    const err = new Error('Not Found');
+    let err = new Error('Not Found');
     err.status = 404;
     return res.render('error', {
         status: err.status,
