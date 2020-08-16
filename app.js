@@ -1,25 +1,25 @@
 "use strict";
 
-var http = require('http');
-var express = require('express');
-var path = require('path');
-var passport = require('passport');
-var TwitterStrategy = require('passport-twitter').Strategy;
-var session = require('express-session');
-var csrf = require('csurf');
-var MongoStore = require('connect-mongo')(session);
-var bodyparser = require('body-parser');
-var mongoose = require('mongoose');
-var fileUpload = require('express-fileupload');
-var moment = require('moment-timezone');
-var Message = require('./schema/Message');
-var User = require('./schema/User');
+const http = require('http');
+const express = require('express');
+const path = require('path');
+const passport = require('passport');
+const TwitterStrategy = require('passport-twitter').Strategy;
+const session = require('express-session');
+const csrf = require('csurf');
+const MongoStore = require('connect-mongo')(session);
+const bodyparser = require('body-parser');
+const mongoose = require('mongoose');
+const fileUpload = require('express-fileupload');
+const moment = require('moment-timezone');
+const Message = require('./schema/Message');
+const User = require('./schema/User');
 
-var app = express();
-var csrfProtection = csrf();
-var log = require('./lib/error_logger');
+const app = express();
+const csrfProtection = csrf();
+const log = require('./lib/error_logger');
 
-var twitterConfig = {
+const twitterConfig = {
     consumerKey: process.env.TWITTER_CONSUMER_KEY,
     consumerSecret: process.env.TWITTER_CONSUMER_SECRET,
     callbackURL: process.env.TWITTER_CALLBACK_URL,
@@ -27,13 +27,13 @@ var twitterConfig = {
 
 moment.tz.setDefault("Asia/Tokyo");
 
-mongoose.connect(process.env.MONGODB_URI,function(err){
+mongoose.connect(process.env.MONGODB_URI,(err)=> {
     if(err){
         console.error(err);
     }else{
         console.log("successfully connected to MongoDB.")
     }
-})
+});
 
 function checkAuth(req, res, next) {
     if(req.isAuthenticated()){
@@ -53,7 +53,7 @@ app.use(session({
         db: 'session',
         ttl: 14 * 24 * 60 * 60,
     })
-}))
+}));
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -65,8 +65,8 @@ app.use("/css", express.static(path.join(__dirname, 'css')))
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
-app.get("/",function(req, res, next) {
-    Message.find({}, function(err, msgs){
+app.get("/", (req, res, next)=> {
+    Message.find({}, (err, msgs)=> {
         if(err) throw err;
         return res.render('index', {
             messages: msgs,
@@ -76,29 +76,29 @@ app.get("/",function(req, res, next) {
     })
 });
 
-app.get("/about", function(req, res, next) {
+app.get("/about", (req, res, next)=> {
     return res.render('about');
 });
 
-app.get("/logout", function(req, res, next) {
+app.get("/logout", (req, res, next)=> {
     req.logout();
     delete req.session.user
     return res.redirect("/");
 })
 
 passport.use(new TwitterStrategy(twitterConfig,
-    function(token, tokenSecret, profile, done){
-        User.findOne({ twitter_profile_id: profile.id }, function(err, user) {
+    (token, tokenSecret, profile, done)=> {
+        User.findOne({ twitter_profile_id: profile.id }, (err, user)=> {
             if (err) {
                 return done(err);
             }else if (!user) {
-                var _user = {
+                const _user = {
                     username: profile.displayName,
                     twitter_profile_id: profile.id,
                     avatar_path: profile.photos[0].value
                 };
-                var newUser = new User(_user);
-                newUser.save(function(err) {
+                const newUser = new User(_user);
+                newUser.save((err)=> {
                     if(err) throw err
                     return done(null, newUser);
                 });
@@ -111,9 +111,9 @@ passport.use(new TwitterStrategy(twitterConfig,
 app.get('/oauth/twitter', passport.authenticate('twitter'));
 
 app.get('/oauth/twitter/callback', passport.authenticate('twitter'),
-    function(req, res, next) {
+    (req, res, next)=> {
 
-        User.findOne({_id: req.session.passport.user}, function(err, user) {
+        User.findOne({_id: req.session.passport.user}, (err, user)=> {
             if(err||!req.session) return res.redirect('/oauth/twitter')
             req.session.user = {
                 username: user.username,
@@ -123,55 +123,55 @@ app.get('/oauth/twitter/callback', passport.authenticate('twitter'),
         })
     }
 );
-passport.serializeUser(function(user, done) {
+passport.serializeUser((user, done)=> {
     done(null, user._id);
 });
 
-passport.deserializeUser(function(id, done) {
-    User.findOne({_id: id}, function(err, user) {
+passport.deserializeUser((id, done)=> {
+    User.findOne({_id: id}, (err, user)=> {
         done(err, user);
     });
 });
 
-app.get("/new", csrfProtection, function(req, res, next) {
+app.get("/new", csrfProtection, (req, res, next)=> {
     return res.render('new', {
         user: req.session && req.session.user ? req.session.user : null,
         csrf: req.csrfToken()
     });
 });
 
-app.post("/new", checkAuth, fileUpload(), csrfProtection, function(req, res, next) {
+app.post("/new", checkAuth, fileUpload(), csrfProtection, (req, res, next)=> {
     if(req.files && req.files.image){
-        var img = req.files.image;
+        const img = req.files.image;
 
-        img.mv('./image/' + img.name, function(err){
+        img.mv('./image/' + img.name, (err)=> {
             if(err) throw err
-            var newMessage = new Message({
+            const newMessage = new Message({
                 username: req.body.username,
                 avatar_path: req.session.user.avatar_path,
                 message: req.body.message,
                 image_path: '/image/' + img.name,
             })
-            newMessage.save(function(err) {
+            newMessage.save((err)=> {
                 if(err) throw err
                 return res.redirect("/");
             })
         })
     }else{
-        var newMessage = new Message({
+        const newMessage = new Message({
             username: req.body.username,
             avatar_path: req.session.user.avatar_path,
             message: req.body.message,
         })
-        newMessage.save(function(err){
+        newMessage.save((err)=> {
             if(err) throw err
             return res.redirect("/");
         })
     }
 })
 
-app.get("/edit/:id", csrfProtection, function(req, res, next) {
-    Message.findOne({_id: req.params.id}, function(err, msg) {
+app.get("/edit/:id", csrfProtection, (req, res, next)=> {
+    Message.findOne({_id: req.params.id}, (err, msg)=> {
         if(err) throw err;
         return res.render('edit', {
             msg: msg,
@@ -181,18 +181,18 @@ app.get("/edit/:id", csrfProtection, function(req, res, next) {
     });
 });
 
-app.post("/update/:id", checkAuth, fileUpload(), csrfProtection, function(req, res, next) {
+app.post("/update/:id", checkAuth, fileUpload(), csrfProtection, (req, res, next)=> {
     if(req.files && req.files.image){
-        var img = req.files.image
+        const img = req.files.image
 
-        img.mv('./image/' + img.name, function(err){
+        img.mv('./image/' + img.name, (err)=>{
             if(err) throw err
 
             Message.update(
                 {_id: req.params.id},
                 {$set: {message: req.body.message,
                         image_path: '/image' + img.name}},
-                function(err) {
+                (err)=> {
                     if(err) throw err
                     return res.redirect("/");
                 }
@@ -203,7 +203,7 @@ app.post("/update/:id", checkAuth, fileUpload(), csrfProtection, function(req, r
             {_id: req.params.id},
             {$set: {message: req.body.message,
                     date: Date.now()}},
-            function(err) {
+            (err)=> {
                 if(err) throw err
                 return res.redirect("/");
             }
@@ -211,22 +211,22 @@ app.post("/update/:id", checkAuth, fileUpload(), csrfProtection, function(req, r
     }
 });
 
-app.post("/delete/:id", function(req, res, next) {
-    Message.remove({_id: req.params.id}, function(err){
+app.post("/delete/:id", (req, res, next)=> {
+    Message.remove({_id: req.params.id}, (err)=> {
         if(err) throw err;
         return res.redirect("/");
     });
 });
 
-app.use(function(req, res, next) {
-    var err = new Error('Not Found');
+app.use((req, res, next)=> {
+    const err = new Error('Not Found');
     err.status = 404;
     return res.render('error', {
         status: err.status,
     });
 });
 
-app.use(function(err, req, res, next) {
+app.use((err, req, res, next)=> {
     log.error(err);
     if (err.code === 'EBADCSRFTOKEN'){
         res.status(403)
@@ -239,6 +239,6 @@ app.use(function(err, req, res, next) {
     });
 });
 
-var server = http.createServer(app);
+const server = http.createServer(app);
 server.listen(process.env.PORT);
 // server.listen('3000');
