@@ -2,11 +2,11 @@
 
 var http = require('http');
 var express = require('express');
-var path = require('path')
+var path = require('path');
 var passport = require('passport');
 var TwitterStrategy = require('passport-twitter').Strategy;
 var session = require('express-session');
-var csrf = require('csurf')
+var csrf = require('csurf');
 var MongoStore = require('connect-mongo')(session);
 var bodyparser = require('body-parser');
 var mongoose = require('mongoose');
