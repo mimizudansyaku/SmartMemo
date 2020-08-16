@@ -4,7 +4,7 @@ var Message = mongoose.Schema({
   username: String,
   user_id: String,
   message: String,
-  date: {type: Date, default: new Date().getTime()},
+  date: {type: Date, default: new Date()},
   image_path: String,
   avatar_path: String
 });

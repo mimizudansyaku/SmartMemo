@@ -201,7 +201,8 @@ app.post("/update/:id", checkAuth, fileUpload(), csrfProtection, function(req, r
     }else{
         Message.update(
             {_id: req.params.id},
-            {$set: {message: req.body.message}},
+            {$set: {message: req.body.message,
+                    date: Date.now()}},
             function(err) {
                 if(err) throw err
                 return res.redirect("/");
