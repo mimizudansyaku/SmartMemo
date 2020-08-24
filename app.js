@@ -45,7 +45,7 @@ function checkAuth(req, res, next) {
 
 app.use(bodyparser())
 app.use(session({
-    secret: 'b87ef9fb4a152dbfe4cf4ea630444474',
+    secret: process.env.SESSION_SECRET,
     resave : false,
     saveUninitialized : false,
     store: new MongoStore({
