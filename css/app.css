@@ -13,6 +13,8 @@ ul {
   left: 0;
   z-index: 10;
   width: 100%;
+  background-color: black;
+  color: white;
   height: 64px;
   line-height: 64px;
   border-bottom: 1px solid #dddddd;
