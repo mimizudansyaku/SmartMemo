@@ -25,3 +25,7 @@ sudo mongod --dbpath db
 ```
 nodo app.js
 ```
+## LessファイルをCSSファイルに変換
+```
+./node_modules/less/bin/lessc less/app.less css/app.css
+```
