@@ -1,7 +1,5 @@
-nav(id="header")
+nav(id="menu_bar")
   .update_link
-    a(href="/about")
-      span(class="nav_item") SmartMemoとは
     a(href="/new")
       span(class="nav_item") 投稿する
     if user
@@ -11,4 +9,4 @@ nav(id="header")
     else
       a(href="/oauth/twitter")
         span(class="nav_item") ログイン
-  a#header_logo(href="/") SmartMemo
+  a#menu_bar_logo(href="/") SmartMemo
