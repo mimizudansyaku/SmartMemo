@@ -8,13 +8,30 @@ ul {
   list-style-type: none;
 }
 #menu_bar {
-  width: 60px;
   min-height: 100vh;
+  width: 80px;
+  padding-left: 15px;
   color: white;
-  background-color: black;
+  background-color: #003366;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
 }
 #menu_bar a {
   color: white;
+}
+.material-icons.person {
+  font-size: 30px;
+  /* サイズの指定 */
+}
+.material-icons.person_add {
+  font-size: 30px;
+  /* サイズの指定 */
+}
+#aside {
+  min-height: 100vh;
+  width: 250px;
+  border-right: 1px solid #dddddd;
 }
 .btn {
   display: inline-block;
@@ -45,12 +62,6 @@ ul {
   display: inline;
   vertical-align: middle;
   line-height: inherit;
-}
-.update_link {
-  float: right;
-}
-.update_link a {
-  margin-right: 20px;
 }
 .avatar {
   vertical-align: middle;

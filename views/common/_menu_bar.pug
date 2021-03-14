@@ -1,12 +1,16 @@
 nav(id="menu_bar")
-  .update_link
-    a(href="/new")
-      span(class="nav_item") 投稿する
-    if user
-      img(src=user.avatar_path class="avatar")
-      a(href="/logout")
-        span(class="nav_item") #{user.username}
-    else
-      a(href="/oauth/twitter")
-        span(class="nav_item") ログイン
-  a#menu_bar_logo(href="/") SmartMemo
+  if user
+    a(href="#" class="item")
+      span(class="material-icons person") person
+    a(href="#" class="item")
+      span(class="material-icons textsms") textsms
+    a(href="#" class="item")
+      span(class="material-icons person_add") person_add_alt_1
+    a(href="#" class="item")
+      span(class="material-icons logout") logout
+    a(href="#" class="item")
+      span(class="material-icons setting") settings
+
+  else
+    a(href="/oauth/twitter")
+      span(class="nav_item") ログイン
