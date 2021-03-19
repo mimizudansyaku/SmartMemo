@@ -1,13 +1,8 @@
-doctype html
-html(lang="ja")
-    head
-        meta(charset="utf-8")
-        link(href="css/app.css", rel="stylesheet", type="text/css")
-    body
-        include common/_menu_bar
-        .index.bg
-            .index_txt
-                h1 SmartMemoとは
-                p 様々な機能を追加したメモアプリです。
-                p 現在は開発中です。
-        include common/_footer
+extends _layout
+
+block contents
+  .index.bg
+    .index_txt
+      h1 SmartMemoとは
+      p 様々な機能を追加したメモアプリです。
+      p 現在は開発中です。
